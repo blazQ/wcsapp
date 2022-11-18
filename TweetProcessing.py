@@ -86,7 +86,7 @@ def filter_tweets(unfiltered_tweets, date_filter_lower=None, date_filter_upper=N
 
 def write_tweets_csv(filtered_tweets, file_handle):
     with open(file_handle, "w+", encoding="utf-8") as f:
-        httpwriter = csv.writer(f, delimiter='æ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        httpwriter = csv.writer(f, delimiter='æ')
 
         httpwriter.writerow(['TWEET', 'DATA'])
 
@@ -98,7 +98,7 @@ def write_tweets_csv(filtered_tweets, file_handle):
    Test con un timeframe di esempio.
 '''
 
-date_filter_test = datetime.datetime(2022, 11, 17, 15, 00, 00, tzinfo=pytz.utc)
+date_filter_test = datetime.datetime(2022, 11, 17, 10, 00, 00, tzinfo=pytz.utc)
 date_filter_test_2 = datetime.datetime(2022, 11, 17, 21, 00, 00, tzinfo=pytz.utc)
 
 filtered_tweets_test = filter_tweets(get_tweets('qatecu'),
