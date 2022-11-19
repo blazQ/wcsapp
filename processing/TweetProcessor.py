@@ -1,17 +1,28 @@
 import csv
 import tweepy
 
-class TweetProcessing:
-    def __init__(self):
-        #Token per l'accesso all'API di Twitter
-        self.api_token = 'AAAAAAAAAAAAAAAAAAAAAOTujAEAAAAAyX1EGWg%2FgxFP%2Bvtq4MD4Ro%2BhvhI%3DwcWzJBmMeTJbzuXDHguk8yQY6miHUeIzQ211suzm6Jci7L5LwO'
+
+class TweetProcessor:
+    def __init__(self,
+                 api_token='AAAAAAAAAAAAAAAAAAAAAOTujAEAAAAAyX1EGWg%2FgxFP%2Bvtq4MD4Ro%2BhvhI'
+                           '%3DwcWzJBmMeTJbzuXDHguk8yQY6miHUeIzQ211suzm6Jci7L5LwO'):
+
+        # Token per l'accesso all'API di Twitter, il valore di default è la chiave di Gabriele, può essere
+        # specificata un'altra chiave per uso futuro
+        self.api_token = api_token
 
     '''
         Funzione realizzata per ottenere tutti i Tweet sul mondiale a partire da una lista di hashtag.
         Restituisce una lista di oggetti Tweet per l'uso generico.
         Bound rappresenta il limite di tweet da raccogliere.
     '''
-    def get_tweets(self,hashtags, max_results_bound: int = 100, bound: int = 10):
+
+    # TODO: Aggiornare la funzione get_tweets per avere parti della query che non sono hashtags (per esempio per
+    #  cercare i tweet coi nomi dei giocatori)
+
+    # TODO: Aggiornare la funzione get_tweets per usare la richiesta e la risposta invece del paginator per prendere
+    #  campi non inclusi nel flatten
+    def get_tweets(self, hashtags, max_results_bound: int = 100, bound: int = 10):
         client = tweepy.Client(bearer_token=self.api_token)
 
         query = ''
@@ -30,10 +41,9 @@ class TweetProcessing:
             query += f'#{hashtags} -is:retweet lang:en'
 
         raw_tweets = tweepy.Paginator(client.search_recent_tweets, query,
-                                    tweet_fields=['context_annotations', 'created_at'],
-                                    max_results=max_results_bound).flatten(limit=bound)
+                                      tweet_fields=['context_annotations', 'created_at', 'author_id'],
+                                      max_results=max_results_bound).flatten(limit=bound)
         return raw_tweets
-
 
     '''
         Filtra una lista di tweet in base a un criterio temporale.
@@ -45,7 +55,8 @@ class TweetProcessing:
         La logica della funzione è contorta per permettere la presenza di diverse combinazioni di filtri.
         Gli id dei tweet spam vanno acquisiti.
     '''
-    def filter_tweets(self,unfiltered_tweets, date_filter_lower=None, date_filter_upper=None, ad_filter: dict = None):
+
+    def filter_tweets(self, unfiltered_tweets, date_filter_lower=None, date_filter_upper=None, ad_filter: dict = None):
         filtered_tweets = []
 
         for tweet in unfiltered_tweets:  # Per ogni tweet della lista non filtrata
@@ -72,10 +83,10 @@ class TweetProcessing:
 
         return filtered_tweets
 
-
-# TODO: Strutturare efficacemente la struttura del file CSV. Proposto ae come carattere separatore in quanto non
-#  presente in genere nei tweet inglesi. Bisogna definire bene anche i campi da salvare.
-    def write_tweets_csv(self,filtered_tweets, file_handle):
+    # TODO: Aggiungere altri campi (IS VERIFIED e USER ID) richiede trattare la richiesta diversamente,
+    #  cioé non usando il flatten ma utilizzando le risposte di ogni singola richiesta e analizzandola. Più
+    #  complicata, decidiamo se farlo o mantenere semplicemente i tweet. todo2.
+    def write_tweets_csv(self, filtered_tweets, file_handle):
         with open(file_handle, "w+", encoding="utf-8") as f:
             httpwriter = csv.writer(f, delimiter='æ')
 
@@ -84,4 +95,6 @@ class TweetProcessing:
             for tweet in filtered_tweets:
                 httpwriter.writerow([tweet.text, tweet.created_at])
 
-
+    # TODO: Gestione dei sondaggi
+    # TODO: Prove con VADER
+    # TODO: Regex per pulire i tweet e raccogliere le predizioni

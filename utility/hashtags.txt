@@ -1,0 +1,39 @@
+-- GENERAL --
+#Qatar2022
+#FIFAWorldCup
+#WorldCup
+#WC2022
+-- PLAYERS --
+Salem Al-Dawsari
+Lionel Messi
+Matthew Ryan
+Kevin de Bruyne
+Neymar
+Alisson
+Andre Onana
+Alphonso Davies
+Keylor Navas
+Luka Modric
+Christian Eriksen
+Moises Caicedo
+Kylian Mbappe
+Gareth Bale
+Joshua Kimmich
+Inaki Williams
+Daichi Kamada
+Harry Kane
+Sardar Azmoun
+Achraf Hakimi
+Hirving Lozano
+Virgil Van Dijk
+Robert Lewandowski
+Cristiano Ronaldo
+Akram Afif
+Kalidou Koulibaly
+Sergej Milinkovic Savic
+Son Heung-min
+Pedri
+Yann Sommer
+Wahbi Khazri
+Federico Valverde
+Christian Pulisic
