@@ -1,5 +1,6 @@
 import csv
 import tweepy
+import re
 
 
 class TweetProcessor:
@@ -40,10 +41,20 @@ class TweetProcessor:
         else:
             query += f'#{hashtags} -is:retweet lang:en'
 
-        raw_tweets = tweepy.Paginator(client.search_recent_tweets, query,
-                                      tweet_fields=['context_annotations', 'created_at', 'author_id'],
-                                      max_results=max_results_bound).flatten(limit=bound)
+        try:
+            raw_tweets = tweepy.Paginator(client.search_recent_tweets, query,
+                                          tweet_fields=['context_annotations', 'created_at', 'author_id'],
+                                          max_results=max_results_bound).flatten(limit=bound)
+        except tweepy.TweepyException as e:
+            print('Error : ' + str(e))
+
         return raw_tweets
+
+    def clean_tweet(self, tweet):
+        '''
+        Rimuove link, caratteri speciali usando le regex.
+        '''
+        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\ / \ / \S+)", " ", tweet).split())
 
     '''
         Filtra una lista di tweet in base a un criterio temporale.
@@ -88,12 +99,22 @@ class TweetProcessor:
     #  complicata, decidiamo se farlo o mantenere semplicemente i tweet. todo2.
     def write_tweets_csv(self, filtered_tweets, file_handle):
         with open(file_handle, "w+", encoding="utf-8") as f:
-            httpwriter = csv.writer(f, delimiter='æ')
+            tweetwriter = csv.writer(f, delimiter='æ')
 
-            httpwriter.writerow(['TWEET', 'DATA'])
+            tweetwriter.writerow(['TWEET', 'DATA'])
 
             for tweet in filtered_tweets:
-                httpwriter.writerow([tweet.text, tweet.created_at])
+                tweetwriter.writerow([tweet.text, tweet.created_at])
+
+    # Legge il file CSV in modo classico. La frase da stampare la cambieremo quando ci salveremo tutti i campi. Ci ho
+    # inserito una chiamata a clean tweet per farmeli stampare puliti, ovviamente la funzione la modificheremo in
+    # base a ciò che ci serve
+    def read_tweets_csv(self, file_handle):
+        with open(file_handle, 'r', encoding='utf-8') as csv_file:
+            tweet_reader = csv.reader(csv_file, delimiter='æ')
+            for row in tweet_reader:
+                if row:
+                    print(f'({self.clean_tweet(row[0])}) created at ({row[1]})')
 
     # TODO: Gestione dei sondaggi
     # TODO: Prove con VADER
