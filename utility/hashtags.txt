@@ -3,6 +3,7 @@
 #FIFAWorldCup
 #WorldCup
 #WC2022
+#QatarWorldCup2022
 -- PLAYERS --
 Salem Al-Dawsari
 Lionel Messi
@@ -37,3 +38,26 @@ Yann Sommer
 Wahbi Khazri
 Federico Valverde
 Christian Pulisic
+Bellingham
+Cancelo
+Joao Felix
+Nuno Mendes
+Vinìcius
+Guimaraĕs
+Antony
+Camavinga
+Tchouameni
+Theo Hernandez
+Àlvarez
+Lisandro Martinez
+Molina
+Koopmeiners
+De Ligt
+De Jong
+Zielinski
+Zalewski
+Sané
+Moukoko
+Musiala
+David
+Mitrovic
