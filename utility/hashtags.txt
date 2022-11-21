@@ -5,59 +5,60 @@
 #WC2022
 #QatarWorldCup2022
 -- PLAYERS --
-Salem Al-Dawsari
-Lionel Messi
-Matthew Ryan
-Kevin de Bruyne
-Neymar
-Alisson
-Andre Onana
-Alphonso Davies
-Keylor Navas
-Luka Modric
-Christian Eriksen
-Moises Caicedo
-Kylian Mbappe
-Gareth Bale
-Joshua Kimmich
-Inaki Williams
-Daichi Kamada
-Harry Kane
-Sardar Azmoun
-Achraf Hakimi
-Hirving Lozano
-Virgil Van Dijk
-Robert Lewandowski
-Cristiano Ronaldo
-Akram Afif
-Kalidou Koulibaly
-Sergej Milinkovic Savic
-Son Heung-min
-Pedri
-Yann Sommer
-Wahbi Khazri
-Federico Valverde
-Christian Pulisic
-Bellingham
-Cancelo
-Joao Felix
-Nuno Mendes
-Vinìcius
-Guimaraĕs
-Antony
-Camavinga
-Tchouameni
-Theo Hernandez
-Àlvarez
-Lisandro Martinez
-Molina
-Koopmeiners
-De Ligt
-De Jong
-Zielinski
-Zalewski
-Sané
-Moukoko
-Musiala
-David
-Mitrovic
+Salem Al-Dawsari - Arabia saudita
+Lionel Messi - Argenttina
+Matthew Ryan - Australia 
+Kevin de Bruyne - Belgio
+Neymar - Brasile
+Alisson - Brasile
+Andre Onana - Camerun
+Alphonso Davies - Canada
+Keylor Navas - Costa rica
+Luka Modric - Croazia
+Christian Eriksen - Danimarca
+Moises Caicedo - Ecuador
+Kylian Mbappe - Francia
+Gareth Bale - Galles
+Joshua Kimmich - Germania
+Inaki Williams - Ghana
+Daichi Kamada - Giappone
+Harry Kane - Inghilterra
+Sardar Azmoun - Iran
+Achraf Hakimi - Marocco 
+Hirving Lozano - Messico
+Virgil Van Dijk - Olanda
+Robert Lewandowski - Polonia
+Cristiano Ronaldo - Portogallo
+Akram Afif - Qatar
+Kalidou Koulibaly - Senegal
+Sergej Milinkovic Savic - Croazia
+Son Heung-min - Sudcorea
+Pedri - Spagna
+Yann Sommer - Svizzera
+Wahbi Khazri - Tunisia
+Federico Valverde - Uruguay
+Christian Pulisic - USA
+Bellingham - Inghilterra
+Cancelo - Portogallo
+Joao Felix - Portogallo
+Nuno Mendes - Portogallo
+Vinìcius - Brasile
+Guimaraĕs - Brasile
+Antony - Brasile
+Camavinga - Francia
+Tchouameni - Francia
+Theo Hernandez - Francia 
+Àlvarez - Argentina
+Lisandro Martinez - Argentina 
+Molina - Argentina
+Koopmeiners - Olanda
+De Ligt - Olanda
+De Jong - Olanda
+Zielinski - Polonia
+Zalewski - Polonia
+Sané - Germania
+Moukoko - Germania
+Musiala - Germania
+David - Canada
+Mitrovic - Serbia
+Vlahovic - Serbia

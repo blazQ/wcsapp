@@ -2,13 +2,14 @@ from processing.TweetProcessor import TweetProcessor
 import datetime
 import pytz
 
-date_filter_beginning = datetime.datetime(2022, 11, 20, 16, 00, 00, tzinfo=pytz.utc)
-date_filter_test_end = datetime.datetime(2022, 11, 20, 20, 00, 00, tzinfo=pytz.utc)
+date_filter_beginning = datetime.datetime(2022, 11, 21, 14, 00, 00, tzinfo=pytz.utc)
+date_filter_test_end = datetime.datetime(2022, 11, 21, 18, 30, 00, tzinfo=pytz.utc)
 tweetObj = TweetProcessor()
 
 max_queries = 5
 
-match = 'qatecu'
+match = 'engirn'
+#keywords = ['Azmoun','Kane','Bellingham']
 
 relevant_hashtags = ['Qatar2022',
                      'FIFAWorldCup',

@@ -20,14 +20,11 @@ class TweetProcessor:
         Bound rappresenta il limite di tweet da raccogliere.
     '''
 
-    # TODO: Aggiornare la funzione get_tweets per avere parti della query che non sono hashtags (per esempio per
-    #  cercare i tweet coi nomi dei giocatori)
-
     # TODO: Aggiornare la funzione per restituire il tweet intero, extended
 
     # TODO: Regex per pulire i tweet e raccogliere le predizioni
 
-    def get_tweets(self, hashtags, max_results_bound: int = 100, bound: int = 10, date_filter_lower=None,
+    def get_tweets(self, hashtags=None,keywords=None,max_results_bound: int = 100, bound: int = 10, date_filter_lower=None,
                    date_filter_upper=None):
         client = tweepy.Client(bearer_token=self.api_token)
 
@@ -36,16 +33,27 @@ class TweetProcessor:
         # Se il valore passato è una lista di hashtag, li concateniamo
         if type(hashtags) is list:
             # Constructing query from hashtag list
-
+            query+='(' 
             for i in range(len(hashtags) - 1):
                 query += f'#{hashtags[i]} OR '
-
-            query += f'#{hashtags[len(hashtags) - 1]} -is:retweet lang:en'
+            query += f'#{hashtags[len(hashtags) - 1]}) '
         # Altrimenti è un singolo hashtag
+        elif type(hashtags) is str:
+            query += f'#{hashtags}'
 
-        else:
-            query += f'#{hashtags} -is:retweet lang:en'
+        # Se il valore passato è una lista di keywords, le concateniamo
+        if type(keywords) is list:
+            for i in range(len(keywords) - 1):
+                query += f'{keywords[i]} OR '    
 
+            query += f'{keywords[len(keywords) - 1]} '
+        elif type(keywords) is str:
+        # Altrimenti è una singola hkeyword
+            query += f'{keywords} '
+
+        #alla fine inseriamo i parametri opzionali alla query
+        query += '-is:retweet lang:en'
+        print(query)
         try:
             raw_tweets = tweepy.Paginator(
                 client.search_recent_tweets,
