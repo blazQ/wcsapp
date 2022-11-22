@@ -86,12 +86,21 @@ class TweetProcessor:
         """
         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\ / \ / \S+)", " ", tweet_text).split())
 
-    def only_predictions(keyword,tweet_text):
-        '''
-        In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di vincitrice del mondiale.
-        Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie di parole.
-        '''
-        return re.search(f'(?i){keyword}\s+(wins|world champion|campions|champions|triumphs)',tweet_text)        
+    '''
+    Restituisce una lista di tuple contenente solamente i tweet con predizione della vincitrice dei mondiali
+    '''
+    def only_predictions(keyword,unfiltered_tweets):
+
+        filtered_tweets = []
+        #Scorriamo la lista di tuple tweet-utente e controlliamo se il testo del campo text è nel formato di una predizione
+        for (tweet,user) in unfiltered_tweets:
+            '''
+            In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di vincitrice del mondiale.
+            Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie di parole.
+            '''
+            if re.search(f'(?i){keyword}\s+(wins|world champion|champion|champions|triumphs)',tweet.text) is not None: 
+                filtered_tweets.append((tweet,user)) #se troviamo un match inseriamo la tupla in una lista di tuple filtrate
+        return filtered_tweets      
     
     @staticmethod
     def write_tweets_csv(filtered_tweets_tuples, file_handle):

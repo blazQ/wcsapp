@@ -7,21 +7,18 @@ date_filter_test_end = datetime.datetime(2022, 11, 22, 10, 59, 00, tzinfo=pytz.u
 tweetObj = TweetProcessor()
 
 max_queries = 5
-
-match = 'usawal'
-keywords = ['Pulisic','Bale']
-
+team = 'Brazil'
 relevant_hashtags = ['Qatar2022',
                      'FIFAWorldCup',
                      'WorldCup',
                      'WC2022',
-                     'QatarWorldCup2022',
-                     match
+                     'QatarWorldCup2022'
                      ]
 
-match_file = f'test_results/tweet_{match}.csv'
+predictions_file = f'test_results/tweet_predictions.csv'
 
-filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags,keywords=keywords,max_results_bound=100, bound=20,
+filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags,max_results_bound=100, bound=1,
                                            date_filter_lower=date_filter_beginning,
                                            date_filter_upper=date_filter_test_end)
-tweetObj.write_tweets_csv(filtered_tweets_test, match_file)
+
+tweetObj.write_tweets_csv(TweetProcessor.only_predictions(team,filtered_tweets_test), predictions_file)
