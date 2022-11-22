@@ -98,7 +98,7 @@ class TweetProcessor:
             In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di vincitrice del mondiale.
             Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie di parole.
             '''
-            if re.search(f'(?i){keyword}\s+(wins|world champion|champion|champions|triumphs)',tweet.text) is not None: 
+            if re.search(f'(?i){keyword}\s+(will\s+)?(win|wins|(be\s+)?world\s+champion|(be\s+)?champion|(be\s+)?champions|triumph)',tweet.text) is not None: 
                 filtered_tweets.append((tweet,user)) #se troviamo un match inseriamo la tupla in una lista di tuple filtrate
         return filtered_tweets      
     
