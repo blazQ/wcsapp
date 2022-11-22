@@ -86,6 +86,13 @@ class TweetProcessor:
         """
         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\ / \ / \S+)", " ", tweet_text).split())
 
+    def only_predictions(keyword,tweet_text):
+        '''
+        In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di vincitrice del mondiale.
+        Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie di parole.
+        '''
+        return re.match(f'(?i){keyword}\s+(wins|world champion|campions|champions|triumphs)',tweet_text)        
+    
     @staticmethod
     def write_tweets_csv(filtered_tweets_tuples, file_handle):
         with open(file_handle, "a", encoding="utf-8") as f:
