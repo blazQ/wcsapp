@@ -22,8 +22,6 @@ class TweetProcessor:
 
     # TODO: Aggiornare la funzione per restituire il tweet intero, extended
 
-    # TODO: Regex per pulire i tweet e raccogliere le predizioni
-
     def get_tweets(self, hashtags=None,keywords=None,max_results_bound: int = 100, bound: int = 10, date_filter_lower=None,
                    date_filter_upper=None):
         client = tweepy.Client(bearer_token=self.api_token)
@@ -52,7 +50,7 @@ class TweetProcessor:
             query += f'{keywords} '
 
         #alla fine inseriamo i parametri opzionali alla query
-        query += '-is:retweet lang:en'
+        query += '-is:retweet -is:quote -is:reply lang:en'
 
         try:
             raw_tweets = tweepy.Paginator(
@@ -110,7 +108,7 @@ class TweetProcessor:
             tweetwriter.writerow(['TWEET', 'AUTHOR_ID', 'VERIFIED', 'DATA'])
 
             for (tweet, user) in filtered_tweets_tuples:
-                tweetwriter.writerow([tweet.text, tweet.author_id, user.verified, tweet.created_at])
+                tweetwriter.writerow([tweet.text.replace("\n",""), tweet.author_id, user.verified, tweet.created_at])
 
     # Legge il file CSV in modo classico. La frase da stampare la cambieremo quando ci salveremo tutti i campi. Ci ho
     # inserito una chiamata a clean tweet per farmeli stampare puliti, ovviamente la funzione la modificheremo in
