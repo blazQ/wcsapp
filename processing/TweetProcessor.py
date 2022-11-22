@@ -20,14 +20,7 @@ class TweetProcessor:
 
     # TODO: Aggiornare la funzione per restituire il tweet intero, extended
 
-<<<<<<< HEAD
     def get_tweets(self, hashtags=None,keywords=None,max_results_bound: int = 100, bound: int = 10, date_filter_lower=None,
-=======
-    # TODO: Regex per pulire i tweet e raccogliere le predizioni
-
-    def get_tweets(self, hashtags=None, keywords=None, max_results_bound: int = 100, bound: int = 10,
-                   date_filter_lower=None,
->>>>>>> c3334e32d4e2ddec231e657a417d05779161437c
                    date_filter_upper=None):
         client = tweepy.Client(bearer_token=self.api_token)
 
