@@ -5,8 +5,8 @@
 #WC2022
 #QatarWorldCup2022
 -- PLAYERS --
-Salem Al-Dawsari - Arabia saudita
-Lionel Messi - Argenttina
+Salem Al-Dawsari - Arabia Saudita
+Lionel Messi - Argentina
 Matthew Ryan - Australia 
 Kevin de Bruyne - Belgio
 Neymar - Brasile

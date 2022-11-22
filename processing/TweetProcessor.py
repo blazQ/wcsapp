@@ -1,6 +1,4 @@
 import csv
-import datetime
-import pytz
 import tweepy
 import re
 
@@ -24,7 +22,8 @@ class TweetProcessor:
 
     # TODO: Regex per pulire i tweet e raccogliere le predizioni
 
-    def get_tweets(self, hashtags=None,keywords=None,max_results_bound: int = 100, bound: int = 10, date_filter_lower=None,
+    def get_tweets(self, hashtags=None, keywords=None, max_results_bound: int = 100, bound: int = 10,
+                   date_filter_lower=None,
                    date_filter_upper=None):
         client = tweepy.Client(bearer_token=self.api_token)
 
@@ -33,7 +32,7 @@ class TweetProcessor:
         # Se il valore passato è una lista di hashtag, li concateniamo
         if type(hashtags) is list:
             # Constructing query from hashtag list
-            query+='(' 
+            query += '('
             for i in range(len(hashtags) - 1):
                 query += f'#{hashtags[i]} OR '
             query += f'#{hashtags[len(hashtags) - 1]}) '
@@ -44,14 +43,14 @@ class TweetProcessor:
         # Se il valore passato è una lista di keywords, le concateniamo
         if type(keywords) is list:
             for i in range(len(keywords) - 1):
-                query += f'{keywords[i]} OR '    
+                query += f'{keywords[i]} OR '
 
             query += f'{keywords[len(keywords) - 1]} '
         elif type(keywords) is str:
-        # Altrimenti è una singola hkeyword
+            # Altrimenti è una singola hkeyword
             query += f'{keywords} '
 
-        #alla fine inseriamo i parametri opzionali alla query
+        # alla fine inseriamo i parametri opzionali alla query
         query += '-is:retweet lang:en'
 
         try:
@@ -89,19 +88,23 @@ class TweetProcessor:
     '''
     Restituisce una lista di tuple contenente solamente i tweet con predizione della vincitrice dei mondiali
     '''
-    def only_predictions(keyword,unfiltered_tweets):
+
+    def only_predictions(keyword, unfiltered_tweets):
 
         filtered_tweets = []
-        #Scorriamo la lista di tuple tweet-utente e controlliamo se il testo del campo text è nel formato di una predizione
-        for (tweet,user) in unfiltered_tweets:
-            '''
-            In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di vincitrice del mondiale.
-            Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie di parole.
-            '''
-            if re.search(f'(?i){keyword}\s+(will\s+)?(win|wins|(be\s+)?world\s+champion|(be\s+)?champion|(be\s+)?champions|triumph)',tweet.text) is not None: 
-                filtered_tweets.append((tweet,user)) #se troviamo un match inseriamo la tupla in una lista di tuple filtrate
-        return filtered_tweets      
-    
+        # Scorriamo la lista di tuple tweet-utente e controlliamo se il testo del campo text è nel formato di una
+        # predizione
+        for (tweet, user) in unfiltered_tweets:
+            '''In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di 
+            vincitrice del mondiale. Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie 
+            di parole. '''
+            if re.search(
+                    f'(?i){keyword}\s+(will\s+)?(win|wins|(be\s+)?world\s+champion|(be\s+)?champion|(be\s+)?champions|triumph)',
+                    tweet.text) is not None:
+                filtered_tweets.append(
+                    (tweet, user))  # se troviamo un match inseriamo la tupla in una lista di tuple filtrate
+        return filtered_tweets
+
     @staticmethod
     def write_tweets_csv(filtered_tweets_tuples, file_handle):
         with open(file_handle, "a", encoding="utf-8") as f:
