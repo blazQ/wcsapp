@@ -53,7 +53,7 @@ class TweetProcessor:
 
         #alla fine inseriamo i parametri opzionali alla query
         query += '-is:retweet lang:en'
-        print(query)
+
         try:
             raw_tweets = tweepy.Paginator(
                 client.search_recent_tweets,
@@ -91,7 +91,7 @@ class TweetProcessor:
         In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di vincitrice del mondiale.
         Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie di parole.
         '''
-        return re.match(f'(?i){keyword}\s+(wins|world champion|campions|champions|triumphs)',tweet_text)        
+        return re.search(f'(?i){keyword}\s+(wins|world champion|campions|champions|triumphs)',tweet_text)        
     
     @staticmethod
     def write_tweets_csv(filtered_tweets_tuples, file_handle):
