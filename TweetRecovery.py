@@ -1,16 +1,70 @@
-from processing.TweetProcessor import TweetProcessor
 import datetime
+import getopt, sys
+import logging
+
 import pytz
 
-date_filter_beginning = datetime.datetime(2022, 11, 22, 16, 00, 00, tzinfo=pytz.utc)
-date_filter_test_end = datetime.datetime(2022, 11, 22, 18, 00, 00, tzinfo=pytz.utc)
+from processing.TweetProcessor import TweetProcessor
+
+# Removing 1st argument from list of command line arguments
+argumentList = sys.argv[1:]
+
+# Options
+options = 'm:k:s:e:t'
+
+# Long options
+long_options = ['Match=', 'Keywords=', 'Start=', 'End=', 'Test']
+
+# Esempio  di usage: recovery.py --Match=argeng --Keywords=Messi,Kane --Start=16:00 --End=18:30 (--Test)
+
+match = None
+keywords = None
+start = None
+end = None
+test_flag = False
+
+try:
+    # Individuo ogni coppia di opzioni e relativi argomenti
+    opts, args = getopt.getopt(argumentList, options, long_options)
+    for opt, arg in opts:
+        if opt in ['-m', '--Match']:
+            match = arg
+        elif opt in ['-k', '--Keywords']:
+            keywords = arg.split(sep=',')
+        elif opt in ['-s', '--Start']:
+            start = arg
+        elif opt in ['-e', '--End']:
+            end = arg
+        elif opt in ['-t', '--Test']:
+            test_flag = True  # Se c'è l'opzione Test appende un identificatore al file
+
+
+except getopt.error as e:
+    logging.error(str(e))
+
+# Almeno l'informazione sul match e sul lasso di tempo deve essere presente
+
+if not match or not start or not end:
+    logging.error('Must specify match, start time and end time!')
+    logging.error('Usage: recovery.py --Match=match --Keywords=k1,k2 --Start=hh:mm -End=hh:mm')
+    sys.exit(-1)
+
+logging.info(f'Starting tweet retrieval for {match}  focusing on {keywords} starting {start} and ending {end}. Test '
+             f'Flag: {test_flag}')
+
+# Converto gli orari per poterli formattare con datetime
+
+hStart, mStart = (start.split(sep=':'))
+hEnd, mEnd = (end.split(sep=':'))
+
+# Creazione orari formattati
+date_filter_beginning = datetime.datetime(2022, 11, 22, int(hStart), int(mStart), 00, tzinfo=pytz.utc)
+date_filter_test_end = datetime.datetime(2022, 11, 22, int(hEnd), int(mEnd), 00, tzinfo=pytz.utc)
+
+# Richiamo l'oggetto che processa i dati
 tweetObj = TweetProcessor()
 
-max_queries = 5
-
-match = 'dentun'
-keywords = ['Eriksen','Khazri']
-
+# Hashtag da monitorare
 relevant_hashtags = ['Qatar2022',
                      'FIFAWorldCup',
                      'WorldCup',
@@ -18,10 +72,15 @@ relevant_hashtags = ['Qatar2022',
                      'QatarWorldCup2022',
                      match
                      ]
+# File in cui scrivere
+match_file = f'./test_results/tweet_{match}'
+if test_flag:
+    match_file += '_TEST_BATCH'
+match_file += '.csv'
 
-match_file = f'test_results/tweet_{match}.csv'
-
-filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags,max_results_bound=100, bound=20,
+# Ottengo la lista di tweet filtrati
+filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags, keywords=keywords, max_results_bound=10, bound=10,
                                            date_filter_lower=date_filter_beginning,
                                            date_filter_upper=date_filter_test_end)
+# Scrivo nel file
 tweetObj.write_tweets_csv(filtered_tweets_test, match_file)

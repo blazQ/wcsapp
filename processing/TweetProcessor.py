@@ -1,6 +1,18 @@
 import csv
+import sys
+
 import tweepy
 import re
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler('debug.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 
 class TweetProcessor:
@@ -20,9 +32,15 @@ class TweetProcessor:
 
     # TODO: Aggiornare la funzione per restituire il tweet intero, extended
 
-    def get_tweets(self, hashtags=None,keywords=None,max_results_bound: int = 100, bound: int = 10, date_filter_lower=None,
+    def get_tweets(self, hashtags=None, keywords=None, max_results_bound: int = 100, bound: int = 10,
+                   date_filter_lower=None,
                    date_filter_upper=None):
-        client = tweepy.Client(bearer_token=self.api_token)
+        try:
+            client = tweepy.Client(bearer_token=self.api_token)
+        except tweepy.TweepyException as e:
+            logging.error('Couldn''t get client object: ' + str(e))
+            return None
+        logging.info('Obtained reference to client object')
 
         query = ''
 
@@ -47,8 +65,10 @@ class TweetProcessor:
             # Altrimenti è una singola hkeyword
             query += f'{keywords} '
 
-        #alla fine inseriamo i parametri opzionali alla query
+        # alla fine inseriamo i parametri opzionali alla query
         query += '-is:retweet -is:quote -is:reply lang:en'
+
+        logging.info(f'Query: {query}')
 
         try:
             raw_tweets = tweepy.Paginator(
@@ -62,6 +82,7 @@ class TweetProcessor:
                 max_results=max_results_bound,
                 limit=bound
             )
+            logging.info('Paginator object received')
 
             raw_tweets_tuples = []
             for rsp in raw_tweets:
@@ -70,8 +91,10 @@ class TweetProcessor:
                     if users[tweet.author_id]:
                         raw_tweets_tuples.append((tweet, users[tweet.author_id]))
 
+            logging.info('Coupled users and tweets')
+
         except tweepy.TweepyException as e:
-            print('Error : ' + str(e))
+            logging.error('Error : ' + str(e))
 
         return raw_tweets_tuples
 
@@ -86,6 +109,7 @@ class TweetProcessor:
     Restituisce una lista di tuple contenente solamente i tweet con predizione della vincitrice dei mondiali
     '''
 
+    @staticmethod
     def only_predictions(keyword, unfiltered_tweets):
 
         filtered_tweets = []
@@ -109,8 +133,11 @@ class TweetProcessor:
 
             tweetwriter.writerow(['TWEET', 'AUTHOR_ID', 'VERIFIED', 'DATA'])
 
+            i = 1
             for (tweet, user) in filtered_tweets_tuples:
-                tweetwriter.writerow([tweet.text.replace("\n",""), tweet.author_id, user.verified, tweet.created_at])
+                tweetwriter.writerow([tweet.text.replace("\n", ""), tweet.author_id, user.verified, tweet.created_at])
+                logging.info(f'f(Wrote tweet no.{i} in {file_handle} )')
+                i += 1
 
     # Legge il file CSV in modo classico. La frase da stampare la cambieremo quando ci salveremo tutti i campi. Ci ho
     # inserito una chiamata a clean tweet per farmeli stampare puliti, ovviamente la funzione la modificheremo in
@@ -129,7 +156,10 @@ class TweetProcessor:
         with open(file_handle, 'r', encoding='utf-8') as csv_file:
             tweet_reader = csv.reader(csv_file, delimiter='æ')
             tweets = []
+            i = 1
             for row in tweet_reader:
                 if row:
-                    tweets.append(row[0])
+                    tweets.append(row[0]) # implica che la prima colonna di ogni riga contenga il testo del tweet
+                    logging.info(f'Tweet read no. {i}')
+                    i += 1
         return tweets
