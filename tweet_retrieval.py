@@ -4,19 +4,21 @@ import logging
 
 import pytz
 
-from processing.TweetProcessor import TweetProcessor
+from processing.tweet_processor import TweetProcessor
+from utility import util_func
 
 # Removing 1st argument from list of command line arguments
 argumentList = sys.argv[1:]
 
 # Options
-options = 'n:s:e:t'
+options = 'm:k:s:e:t'
 
 # Long options
-long_options = ['National=', 'Start=', 'End=', 'Test']
+long_options = ['Match=', 'Keywords=', 'Start=', 'End=', 'Test']
 
-# Esempio  di usage: recovery.py --National=argeng --Keywords=Messi,Kane --Start=16:00 --End=18:30 (--Test)
-national = None
+# Esempio  di usage: recovery.py --Match=argeng --Keywords=Messi,Kane --Start=16:00 --End=18:30 (--Test)
+match = None
+keywords = None
 start = None
 end = None
 test_flag = False
@@ -25,8 +27,10 @@ try:
     # Individuo ogni coppia di opzioni e relativi argomenti
     opts, args = getopt.getopt(argumentList, options, long_options)
     for opt, arg in opts:
-        if opt in ['-n', '--National']:
-            national = arg
+        if opt in ['-m', '--Match']:
+            match = arg
+        elif opt in ['-k', '--Keywords']:
+            keywords = arg.split(sep=',')
         elif opt in ['-s', '--Start']:
             start = arg
         elif opt in ['-e', '--End']:
@@ -34,28 +38,29 @@ try:
         elif opt in ['-t', '--Test']:
             test_flag = True  # Se c'è l'opzione Test appende un identificatore al file
 
+
 except getopt.error as e:
     logging.error(str(e))
 
-# Almeno l'informazione sulla nazionale da cercare e sul lasso di tempo deve essere presente
+# Almeno l'informazione sul match e sul lasso di tempo deve essere presente
 
-if not national or not start or not end:
-    logging.error('Must specify national team, start time and end time!')
-    logging.error('Usage: recovery.py --National=national --Start=mm-ddThh:mm -End=mm-ddThh:mm')
+if not match or not start or not end:
+    logging.error('Must specify match, start time and end time!')
+    logging.error('Usage: recovery.py --Match=match --Keywords=k1,k2 --Start=mm-ddThh:mm -End=mm-ddThh:mm')
     sys.exit(-1)
 
-logging.info(f'Starting tweet retrieval of prediction about {national} starting {start} and ending {end}. Test '
+logging.info(f'Starting tweet retrieval for {match}  focusing on {keywords} starting {start} and ending {end}. Test '
              f'Flag: {test_flag}')
 
-# Converto gli orari per poterli formattare con datetime
-dateS = start.split('T')[0]
-timeS = start.split('T')[1]
-dateEnd = end.split('T')[0]
-timeEnd = end.split('T')[1]
-monthS,dayS = (dateS.split(sep='-'))
-hStart, mStart = (timeS.split(sep=':'))
-hEnd, mEnd = (timeEnd.split(sep=':'))
-monthEnd,dayEnd = (dateEnd.split(sep='-'))
+
+# Decodifico inizio e fine come tuple
+start = util_func.decode_date(start)
+end = util_func.decode_date(end)
+
+# Tuple unpacking
+monthS, dayS, hStart, mStart = start
+monthEnd, dayEnd, hEnd, mEnd = end
+
 
 # Creazione orari formattati
 date_filter_beginning = datetime.datetime(2022, int(monthS), int(dayS), int(hStart), int(mStart), 00, tzinfo=pytz.utc)
@@ -70,15 +75,17 @@ relevant_hashtags = ['Qatar2022',
                      'WorldCup',
                      'WC2022',
                      'QatarWorldCup2022',
+                     match
                      ]
 # File in cui scrivere
-predictions_file = f'./test_results/tweet_predictions_{national}'
+match_file = f'./test_results/tweet_{match}'
 if test_flag:
-    predictions_file += '_TEST_PREDICTIONS_BATCH'
-predictions_file += '.csv'
+    match_file += '_TEST_BATCH'
+match_file += '.csv'
 
-filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags,keywords=national,max_results_bound=100, bound=20,
+# Ottengo la lista di tweet filtrati
+filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags, keywords=keywords, max_results_bound=10, bound=10,
                                            date_filter_lower=date_filter_beginning,
                                            date_filter_upper=date_filter_test_end)
-
-tweetObj.write_tweets_csv(TweetProcessor.only_predictions(national,filtered_tweets_test),predictions_file )
+# Scrivo nel file
+tweetObj.write_tweets_csv(filtered_tweets_test, match_file)

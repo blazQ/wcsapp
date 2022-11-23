@@ -1,4 +1,4 @@
-from processing.TweetProcessor import TweetProcessor
+from processing.tweet_processor import TweetProcessor
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from langdetect import detect
 
