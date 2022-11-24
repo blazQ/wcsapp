@@ -16,7 +16,7 @@ options = 'n:s:e:t'
 # Long options
 long_options = ['National=', 'Start=', 'End=', 'Test']
 
-# Esempio  di usage: recovery.py --National=argeng --Keywords=Messi,Kane --Start=16:00 --End=18:30 (--Test)
+# Esempio  di usage: recovery.py --National=France --Start=11-22T16:00 --End=11-22T18:30 (--Test)
 national = None
 start = None
 end = None
