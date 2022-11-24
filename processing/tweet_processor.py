@@ -9,7 +9,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
-        logging.FileHandler('logs/debug.log'),
+        logging.FileHandler('debug.log'),
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -136,7 +136,7 @@ class TweetProcessor:
             i = 1
             for (tweet, user) in filtered_tweets_tuples:
                 tweetwriter.writerow([tweet.text.replace("\n", ""), tweet.author_id, user.verified, tweet.created_at])
-                logging.info(f'f(Wrote tweet no.{i} in {file_handle} )')
+                logging.info(f'(Wrote tweet no.{i} in {file_handle} )')
                 i += 1
 
     # Legge il file CSV in modo classico. La frase da stampare la cambieremo quando ci salveremo tutti i campi. Ci ho

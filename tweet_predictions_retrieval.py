@@ -48,8 +48,6 @@ if not national or not start or not end:
 logging.info(f'Starting tweet retrieval of prediction about {national} starting {start} and ending {end}. Test '
              f'Flag: {test_flag}')
 
-
-
 # Decodifico inizio e fine come tuple
 start = util_func.decode_date(start)
 end = util_func.decode_date(end)
@@ -57,7 +55,6 @@ end = util_func.decode_date(end)
 # Tuple unpacking
 monthS, dayS, hStart, mStart = start
 monthEnd, dayEnd, hEnd, mEnd = end
-
 
 # Creazione orari formattati
 date_filter_beginning = datetime.datetime(2022, int(monthS), int(dayS), int(hStart), int(mStart), 00, tzinfo=pytz.utc)
@@ -79,8 +76,8 @@ if test_flag:
     predictions_file += '_TEST_PREDICTIONS_BATCH'
 predictions_file += '.csv'
 
-filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags,keywords=national,max_results_bound=100, bound=20,
+filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags, keywords=national, max_results_bound=100, bound=20,
                                            date_filter_lower=date_filter_beginning,
                                            date_filter_upper=date_filter_test_end)
 
-tweetObj.write_tweets_csv(TweetProcessor.only_predictions(national,filtered_tweets_test),predictions_file )
+tweetObj.write_tweets_csv(TweetProcessor.only_predictions(national, filtered_tweets_test), predictions_file)

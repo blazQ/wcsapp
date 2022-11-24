@@ -84,7 +84,7 @@ if test_flag:
 match_file += '.csv'
 
 # Ottengo la lista di tweet filtrati
-filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags, keywords=keywords, max_results_bound=10, bound=10,
+filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags, keywords=keywords, max_results_bound=100, bound=20,
                                            date_filter_lower=date_filter_beginning,
                                            date_filter_upper=date_filter_test_end)
 # Scrivo nel file
