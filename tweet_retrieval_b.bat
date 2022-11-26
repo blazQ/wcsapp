@@ -1,2 +1,2 @@
-@py.exe .\tweet_retrieval.py --Match=BELCAN --Keywords=Belgium,Canada --Start=11-23T20:00 --End=11-23T20:30
+@py.exe .\tweet_retrieval.py --Match=BRASRB --Keywords=Brazil  --Start=11-24T22:15 --End=11-26T08:00
 @pause
