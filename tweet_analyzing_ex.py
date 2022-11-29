@@ -5,7 +5,7 @@ from langdetect import detect
 # TODO: Iniziare a fare dei mock di medie salvataggi di informazioni di sentiment ecc.
 
 tweetObj = TweetProcessor()
-tweets = tweetObj.get_tweet_list_csv('test_results\\tweet_Example1.csv')
+tweets = tweetObj.get_tweet_list_csv('test_results\\tweetExample1.csv')
 
 Analyzer = SentimentIntensityAnalyzer()
 
