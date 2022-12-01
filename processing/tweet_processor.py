@@ -14,11 +14,16 @@ logging.basicConfig(
     ]
 )
 
+# Bearer Keys
+gabriele_bearer_token = 'AAAAAAAAAAAAAAAAAAAAAOTujAEAAAAAyX1EGWg%2FgxFP%2Bvtq4MD4Ro%2BhvhI' \
+                        '%3DwcWzJBmMeTJbzuXDHguk8yQY6miHUeIzQ211suzm6Jci7L5LwO '
+pietro_bearer_token = 'AAAAAAAAAAAAAAAAAAAAAOC9jwEAAAAASKimZd8aW1PcroOjmQz55aIdpSA' \
+                      '%3D0uIhHfPOQy3Eof4HaPEhK6pCXtPQnFq4eo9WlnBQ9LNLJqfjn0 '
+
 
 class TweetProcessor:
     def __init__(self,
-                 api_token='AAAAAAAAAAAAAAAAAAAAAOTujAEAAAAAyX1EGWg%2FgxFP%2Bvtq4MD4Ro%2BhvhI'
-                           '%3DwcWzJBmMeTJbzuXDHguk8yQY6miHUeIzQ211suzm6Jci7L5LwO'):
+                 api_token=pietro_bearer_token):
 
         # Token per l'accesso all'API di Twitter, il valore di default è la chiave di Gabriele, può essere
         # specificata un'altra chiave per uso futuro
@@ -159,7 +164,7 @@ class TweetProcessor:
             i = 1
             for row in tweet_reader:
                 if row:
-                    tweets.append(row[0]) # implica che la prima colonna di ogni riga contenga il testo del tweet
+                    tweets.append(row[0])  # implica che la prima colonna di ogni riga contenga il testo del tweet
                     logging.info(f'Tweet read no. {i}')
                     i += 1
         return tweets
