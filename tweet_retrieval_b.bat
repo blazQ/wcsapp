@@ -1,2 +1,2 @@
-@py.exe .\tweet_retrieval.py --Match=TUNFRA --Keywords=Tunisia,France --Start=11-30T00:00 --End=11-30T14:59
+@py.exe .\tweet_retrieval.py --Match=JPNESP --Keywords=Japan,Spain --Start=12-01T00:00 --End=12-01T18:59
 @pause
