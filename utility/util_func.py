@@ -7,4 +7,10 @@ def decode_date(argument_date: str) -> tuple[str, str, str, str]:
     hrs, mnt = (time.split(sep=':'))
     return month, day, hrs, mnt
 
-
+def sentimentValue(compound):
+    if compound >= 0.05:
+        return 'Positive sentiment'
+    elif compound > -0.05 and compound < 0.05:
+        return 'Neutral sentiment'
+    elif compound <= -0.05:
+        return 'Negative sentiment'
