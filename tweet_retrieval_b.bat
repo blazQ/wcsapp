@@ -1,2 +1,2 @@
-@py.exe .\tweet_retrieval.py --Match=CRCGER --Keywords=CostaRica,Germany --Start=12-01T21:00 --End=12-01T22:00
+@py.exe .\tweet_retrieval.py --Match=ARGAUS --Keywords=Argentina,Australia --Start=12-03T00:00 --End=12-03T20:30
 @pause0

@@ -14,3 +14,10 @@ def sentimentValue(compound):
         return 'Neutral sentiment'
     elif compound <= -0.05:
         return 'Negative sentiment'
+
+def filterTweet(text_tweet):
+    keywords = ['live','livestream','live stream','match link','nft']
+    for keyword in keywords:
+        if keyword in text_tweet:
+            return True
+    return False
