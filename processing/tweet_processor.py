@@ -1,6 +1,7 @@
 import csv
+import os
 import sys
-
+from utility import util_func
 import tweepy
 import re
 import logging
@@ -106,9 +107,12 @@ class TweetProcessor:
     @staticmethod
     def clean_tweet(tweet_text):
         """
-        Rimuove link, caratteri speciali usando le regex.
+        Rimuove link e caratteri speciali tranne # usando le regex.
         """
-        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\ / \ / \S+)", " ", tweet_text).split())
+        tweet_text =  re.sub(r"http\S+", "", tweet_text)
+        tweet_text = re.sub('[^a-zA-Z0-9# \n\.]', '', tweet_text)
+        return re.sub(' +', ' ', tweet_text)
+        #return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\ / \ / \S+)", " ", tweet_text).split())
 
     '''
     Restituisce una lista di tuple contenente solamente i tweet con predizione della vincitrice dei mondiali
@@ -164,9 +168,27 @@ class TweetProcessor:
             i = 1
             for row in tweet_reader:
                 if row:
-                    tweets.append(row[0])  # implica che la prima colonna di ogni riga contenga il testo del tweet
-                    logging.info(f'Tweet read no. {i}')
+                    tweets.append((row[0],row[2]))  # implica che la prima colonna di ogni riga contenga il testo del tweet
+                    #logging.info(f'Tweet read no. {i}')
                     i += 1
         return tweets
+    
+    def csv_filtering(filename):
+    #viene aperto il file csv da pulire
+        with open(filename,'r',encoding='utf-8') as match_csv:
+            #crea un nuovo file csv dove inserire i tweet filtrati
+            with open(f'test_results/match_filtered/{os.path.basename(match_csv.name)}','a',encoding='utf-8') as filtered_csv:
+                tweetwriter = csv.writer(filtered_csv, delimiter='æ')
+                tweetwriter.writerow(['TWEET', 'AUTHOR_ID', 'VERIFIED', 'DATA'])
+                
+                tweet_reader = csv.reader(match_csv, delimiter='æ')
+                
+                for row in tweet_reader:
+                    if row:
+                        #controlliamo se ci sono keyword che indentificano tweet che vogliamo scartare e se la riga che stiamo considerando non è un intestazione
+                        if util_func.filterTweet(row[0]) == False and row[0] != 'TWEET':
+                            #inseriamo il tweet nel nuovo csv
+                            tweetwriter.writerow([TweetProcessor.clean_tweet(row[0]), row[1], row[2], row[3]])
+                   
 
 
