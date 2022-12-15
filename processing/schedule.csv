@@ -59,5 +59,7 @@ id,home_team_country,away_team_country,winner,week
 58,NED,ARG,ARG,5
 59,POR,MAR,MAR,5
 60,ENG,FRA,FRA,5
-61,ARG,CRO,,6
-62,FRA,MAR,,6
+61,ARG,CRO,ARG,6
+62,FRA,MAR,FRA,6
+63,CRO,MAR,,7
+64,ARG,FRA,,7

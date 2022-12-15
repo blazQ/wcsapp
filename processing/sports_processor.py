@@ -53,7 +53,7 @@ def get_wc_matches_csv(file_handle):
                                'away_team_fouls_committed']
                               )
         # Per ogni match del  mondiale
-        for i in range(0, 58):
+        for i in range(0, 64):
             # Recupera l'ID del match
             match_id = matches[i]['id']
             # Squadre che giocano
@@ -496,32 +496,59 @@ def extract_schedule(file_handle=None, file_handle_output=None):
             csv_writer.writerow([row[0], row[1], row[2], row[3], row[32]])
 
 
+def split_sentiment(file_handle, file_handle_output):
+    # Open the input_file in read mode and output_file in write mode
+    with open(file_handle, 'r') as read_obj, \
+            open(file_handle_output, 'w', newline='') as write_obj:
+        # Create a csv.reader object from the input file object
+        csv_reader = csv.reader(read_obj)
+        # Create a csv.writer object from the output file object
+        csv_writer = csv.writer(write_obj)
+        # Read each row of the input csv file as list
+        for row in csv_reader:
+            home_team = None
+            away_team = None
+            if(row[0]=='MATCH'):
+                home_team = 'home_team_country'
+                away_team = 'away_team_country'
+            else:
+                home_team = row[0][:len(row[0])//2].upper()
+                away_team = row[0][len(row[0])//2:len(row[0])].upper()
+
+            csv_writer.writerow([home_team, away_team, row[1], row[2]])
+
+
 def display(y_pred, X_test):
     for g in range(len(y_pred)):
         win_prob = round(y_pred[g], 2)
         away_team = X_test.reset_index().drop(columns='id_x').loc[g, 'away_team_country']
         home_team = X_test.reset_index().drop(columns='id_x').loc[g, 'home_team_country']
-        print(f'The {away_team} have a probability of {win_prob} of beating the {home_team}.')
+        print(f'{away_team} have a probability of {win_prob} of beating {home_team}.')
 
 
-def prep_test_train(current_week, weeks):
+def prep_test_train(current_week, weeks, sentiment_file, schedule_file, matches_file):
     current_week = current_week + 1
-    schedule_df = pd.read_csv('schedule.csv')
-    weeks_games_df = game_data_up_to_week(current_week, 'matchesFinalVer.csv')
+    schedule_df = pd.read_csv(schedule_file)
+    weeks_games_df = game_data_up_to_week(current_week, matches_file)
     agg_games_df = agg_weekly_data(schedule_df, weeks_games_df, current_week, weeks)
     # get sentiment
+    sentiment_df = pd.read_csv(sentiment_file)
     # merge sentiment
-
+    agg_games_df = pd.merge(agg_games_df, sentiment_df, how='inner', left_on=['home_team_country', 'away_team_country'],
+                            right_on=['home_team_country', 'away_team_country'])
     train_df = agg_games_df[agg_games_df.result.notna()]
     current_week = current_week - 1
     test_df = agg_games_df[agg_games_df.week == current_week]
     return test_df, train_df
 
 
-current = 6
+current = 7
 weeks = list(range(1, current + 1))
 
-pred_games_df, comp_games_df = prep_test_train(current_week=current, weeks=weeks)
+pred_games_df, comp_games_df = prep_test_train(current_week=current, weeks=weeks, sentiment_file='sentiment_results2'
+                                                                                                 '.csv '
+                                               , schedule_file='schedule.csv', matches_file='matchesFinalVer.csv')
+
 msk = np.random.rand(len(comp_games_df)) < 0.8
 
 train_df = comp_games_df[msk]
@@ -544,6 +571,7 @@ clf.fit(X_train, np.ravel(y_train.values))
 y_pred = clf.predict_proba(X_test)
 y_pred = y_pred[:, 1]
 
+#  Display Accuracy test
 # display(y_pred, test_df)
 # print(accuracy_score(y_test, np.round(y_pred)))
 
@@ -566,5 +594,5 @@ bst = xgb.train(param, dtrain, num_round, evallist)
 X_test = pred_games_df.drop(columns=['away_team_country', 'home_team_country', 'week', 'result'])
 y_pred = clf.predict_proba(X_test)
 y_pred = y_pred[:, 1]
-
+#
 display(y_pred, pred_games_df)
