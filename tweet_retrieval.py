@@ -89,3 +89,6 @@ filtered_tweets_test = tweetObj.get_tweets(relevant_hashtags, keywords=keywords,
                                            date_filter_upper=date_filter_test_end)
 # Scrivo nel file
 tweetObj.write_tweets_csv(filtered_tweets_test, match_file)
+
+# Scrivo un nuovo file filtrando tutti i tweet
+TweetProcessor.csv_filtering(match_file)
