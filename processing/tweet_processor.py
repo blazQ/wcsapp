@@ -192,13 +192,3 @@ class TweetProcessor:
                    
 
 
-    # TODO: Funzioni per unire più file  -> Finalizzato a creare il file finale
-    # TODO: Funzioni per scremare i tweet da un file sulla base di:
-    #       pubblicità, temi non rilevanti
-    # TODO: Funzioni per individuare i tweet a favore di una squadra piuttosto che un'altra
-
-    # TODO: Opzionale: Vedere se si riesce a prendere un API con i risultati recenti delle due finaliste
-    #       con delle statistiche importanti
-
-    #TODO: Fare delle prove con pandas e un modello di ML: Capire come possiamo fare per ottenere
-    # il risultato che ci interessa.
