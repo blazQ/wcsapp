@@ -16,15 +16,12 @@ logging.basicConfig(
 )
 
 # Bearer Keys
-gabriele_bearer_token = 'AAAAAAAAAAAAAAAAAAAAAOTujAEAAAAAyX1EGWg%2FgxFP%2Bvtq4MD4Ro%2BhvhI' \
-                        '%3DwcWzJBmMeTJbzuXDHguk8yQY6miHUeIzQ211suzm6Jci7L5LwO '
-pietro_bearer_token = 'AAAAAAAAAAAAAAAAAAAAAOC9jwEAAAAASKimZd8aW1PcroOjmQz55aIdpSA' \
-                      '%3D0uIhHfPOQy3Eof4HaPEhK6pCXtPQnFq4eo9WlnBQ9LNLJqfjn0 '
+bearer_token = ''
 
 
 class TweetProcessor:
     def __init__(self,
-                 api_token=pietro_bearer_token):
+                 api_token=bearer_token):
 
         # Token per l'accesso all'API di Twitter, il valore di default è la chiave di Gabriele, può essere
         # specificata un'altra chiave per uso futuro
@@ -125,8 +122,8 @@ class TweetProcessor:
         # Scorriamo la lista di tuple tweet-utente e controlliamo se il testo del campo text è nel formato di una
         # predizione
         for (tweet, user) in unfiltered_tweets:
-            '''In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di 
-            vincitrice del mondiale. Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie 
+            '''In base alla keyword passata, controlla se la keyword è abbinata con le parole di predizione di
+            vincitrice del mondiale. Ignora se maiuscolo o minuscole e tollera più di un whitespace fra le due coppie
             di parole. '''
             if re.search(
                     f'(?i){keyword}\s+(will\s+)?(win|wins|(be\s+)?world\s+champion|(be\s+)?champion|(be\s+)?champions|triumph)',
@@ -172,7 +169,7 @@ class TweetProcessor:
                     #logging.info(f'Tweet read no. {i}')
                     i += 1
         return tweets
-    
+
     def csv_filtering(filename):
     #viene aperto il file csv da pulire
         with open(filename,'r',encoding='utf-8') as match_csv:
@@ -180,15 +177,15 @@ class TweetProcessor:
             with open(f'test_results/match_filtered/{os.path.basename(match_csv.name)}','a',encoding='utf-8') as filtered_csv:
                 tweetwriter = csv.writer(filtered_csv, delimiter='æ')
                 tweetwriter.writerow(['TWEET', 'AUTHOR_ID', 'VERIFIED', 'DATA'])
-                
+
                 tweet_reader = csv.reader(match_csv, delimiter='æ')
-                
+
                 for row in tweet_reader:
                     if row:
                         #controlliamo se ci sono keyword che indentificano tweet che vogliamo scartare e se la riga che stiamo considerando non è un intestazione
                         if util_func.filterTweet(row[0]) == False and row[0] != 'TWEET':
                             #inseriamo il tweet nel nuovo csv
                             tweetwriter.writerow([TweetProcessor.clean_tweet(row[0]), row[1], row[2], row[3]])
-                   
+
 
 
